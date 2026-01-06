@@ -9,6 +9,7 @@ import {
   PhoneFormattingConfig,
 } from '../utils/handlePhoneChange';
 import { handleUserInput } from '../utils/handleUserInput';
+import { removeDialCode } from '../utils/phoneUtils/removeDialCode';
 import { useHistoryState } from './useHistoryState';
 
 export const MASK_CHAR = '.';
@@ -346,13 +347,54 @@ export const usePhoneInput = ({
       return;
     }
 
-    const inputValue = disableDialCodeAndPrefix
-      ? ''
-      : `${prefix}${newCountry.dialCode}${charAfterDialCode}`;
+    // Extract the phone number without the dial code from current input
+    let phoneWithoutDialCode: string;
+
+    if (disableDialCodeAndPrefix) {
+      // When dial code is disabled, inputValue is already just the phone number
+      phoneWithoutDialCode = inputValue;
+    } else {
+      // Extract phone number by removing the dial code
+      phoneWithoutDialCode = removeDialCode({
+        phone: inputValue,
+        dialCode: fullCountry.dialCode,
+        prefix,
+        charAfterDialCode,
+      });
+    }
+
+    // Check if there's an actual phone number (not just dial code)
+    const hasPhoneNumber = phoneWithoutDialCode.trim().length > 0;
+
+    let newInputValue: string;
+    let newPhone: string;
+
+    if (hasPhoneNumber) {
+      // Preserve the phone number and reformat it with the new country
+      const phoneValue = disableDialCodeAndPrefix
+        ? phoneWithoutDialCode
+        : `${prefix}${newCountry.dialCode}${charAfterDialCode}${phoneWithoutDialCode}`;
+
+      const result = handlePhoneChange({
+        value: phoneValue,
+        country: newCountry,
+        insertDialCodeOnEmpty: false,
+        ...phoneFormattingConfig,
+      });
+
+      newInputValue = result.inputValue;
+      newPhone = result.phone;
+    } else {
+      // No phone number, just reset to dial code
+      newInputValue = disableDialCodeAndPrefix
+        ? ''
+        : `${prefix}${newCountry.dialCode}${charAfterDialCode}`;
+      newPhone = `${prefix}${newCountry.dialCode}`;
+    }
 
     updateHistory({
-      inputValue,
-      phone: `${prefix}${newCountry.dialCode}`,
+      inputValue: newInputValue,
+      phone: newPhone,
       country: newCountry.iso2,
     });
 
