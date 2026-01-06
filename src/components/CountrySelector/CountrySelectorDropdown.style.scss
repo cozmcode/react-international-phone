@@ -100,21 +100,21 @@ $search-input-placeholder-color: var(
 
   &__search-container {
     padding: 8px;
-    border-bottom: 1px solid $search-input-border-color;
   }
 
   &__search-input {
     width: 100%;
     box-sizing: border-box;
-    padding: 8px 12px;
-    border: 1px solid $search-input-border-color;
-    border-radius: 4px;
-    background-color: $search-input-background-color;
+    padding: 8px 0;
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px solid #99a1af;
+    background-color: transparent;
     color: $search-input-text-color;
     font-size: $dropdown-item-font-size;
 
     &:focus {
-      border-color: $search-input-focus-border-color;
+      border-bottom-color: #99a1af;
       outline: none;
     }
 
