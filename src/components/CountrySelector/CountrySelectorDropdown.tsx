@@ -351,13 +351,21 @@ export const CountrySelectorDropdown: React.FC<
   useEffect(() => {
     if (!listRef.current) return;
     if (show) {
-      focusList();
+      // Focus search input if search is enabled, otherwise focus the list
+      if (enableSearch) {
+        // Use setTimeout to ensure the input is rendered before focusing
+        setTimeout(() => {
+          focusSearchInput();
+        }, 0);
+      } else {
+        focusList();
+      }
     } else {
       resetFocusedItemIndex();
       setSearchQuery('');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show, focusSearchInput, focusList]);
+  }, [show, enableSearch, focusSearchInput, focusList]);
 
   // Update focusedItemIndex on selectedCountry prop change
   useEffect(() => {
