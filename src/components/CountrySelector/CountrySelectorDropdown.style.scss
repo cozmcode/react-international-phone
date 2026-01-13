@@ -46,6 +46,7 @@ $dropdown-shadow: var(
 
 $dropdown-left: var(--react-international-phone-dropdown-left, 0);
 $dropdown-top: var(--react-international-phone-dropdown-top, 44px);
+$dropdown-width: var(--react-international-phone-dropdown-width, 300px);
 
 $dropdown-preferred-list-divider-color: var(
   --react-international-phone-dropdown-preferred-list-divider-color,
@@ -56,6 +57,8 @@ $dropdown-preferred-list-divider-margin: var(
   --react-international-phone-dropdown-preferred-list-divider-margin,
   0
 );
+
+$dropdown-z-index: var(--react-international-phone-dropdown-z-index, 9999);
 
 $search-input-background-color: var(
   --react-international-phone-search-input-background-color,
@@ -84,12 +87,12 @@ $search-input-placeholder-color: var(
 
 .react-international-phone-country-selector-dropdown {
   position: absolute;
-  z-index: 1;
+  z-index: $dropdown-z-index;
   top: $dropdown-top;
   left: $dropdown-left;
   display: flex;
   overflow: hidden;
-  width: 300px;
+  width: $dropdown-width;
   max-height: 300px;
   flex-direction: column;
   margin: 0;
